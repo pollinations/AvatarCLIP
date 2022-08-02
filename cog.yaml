@@ -1,12 +1,11 @@
 
 build:
-  cuda: "10.2"
   gpu: true
   python_version: "3.7"
   python_packages:
-    - "torch==1.7.0"
-    - "torchvision==0.8.0"
-    - "torchaudio==0.7.0"
+    - "torch==1.10.1"
+    - "torchvision==0.11.2"
+    - "torchaudio==0.10.1"
     - trimesh==3.9.8
     - numpy==1.21.0
     - pyhocon==0.3.57
@@ -21,109 +20,58 @@ build:
     - "zip"
   run:
     - pip install --upgrade pip
-    - pip install ftfy regex tqdm git+https://github.com/openai/CLIP.git smplx[all] chumpy dotmap PyYAML ninja
-    # - pip install git+https://github.com/voodoohop/neural_renderer.git git+https://github.com/nghorbani/human_body_prior.git git+https://github.com/nghorbani/body_visualizer.git
+    - pip install ftfy regex tqdm git+https://github.com/openai/CLIP.git smplx[all] chumpy dotmap PyYAML ninja tensorboard scikit-image
+    - pip install git+https://github.com/nghorbani/human_body_prior.git
+    - pip install git+https://github.com/nghorbani/body_visualizer.git
+    #- pip install git+https://github.com/voodoohop/neural_renderer.git
+    - pip install tensorboard scikit-image
+    - pip install gdown
+    - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_ && unzip smpl.zip && mv smpl smpl_models
+    - gdown --id 1ae-pnDhzOG3brxBfU1lBq8CyOKz4rnzd && unzip avatarclip_data.zip 
+    - mkdir -p AvatarGen/ShapeGen/data/ && mv -v avatarclip_data/* AvatarGen/ShapeGen/data/
+
+    #- pip install git+https://github.com/voodoohop/neural_renderer.git git+https://github.com/nghorbani/human_body_prior.git git+https://github.com/nghorbani/body_visualizer.git
     # - gdown --id 1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N
     # - unzip models_smplx_v1_1.zip 
 predict: "predict.py:Predictor"
 
-    # 
-    # 
-    # - conda init bash
-    # - source $HOME/.bashrc
-    # - conda install -c pytorch3d
-
-
-  #   1  ls
-  #   2  pip --version
-  #   3  which pip
-  #   4  pip install pytorch3d==0.6.2
-  #   5  /root/.pyenv/shims/pip --version
-  #   6  /root/.pyenv/shims/pip install pytorch3d==0.6.2
-  #   7  python -m pip install --upgrade pip
-  #   8  python -m pip install --upgrade pytorch3d
-  #   9  python -m pip install pytorch3d==0.6.2
-  #  10  wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh
-  #  11  bash ./Miniconda3-py37_4.12.0-Linux-x86_64.sh -fb
-  #  12  conda install -c pytorch pytorch=1.9.0 torchvision=0.10.0 cudatoolkit=10.2
-  #  13  bash ./Miniconda3-py37_4.12.0-Linux-x86_64.sh -fb
-  #  14  conda
-  #  15  bash ./Miniconda3-py37_4.12.0-Linux-x86_64.sh
-  #  16  conda
-  #  17  bash
-  #  18  /root/miniconda3/bin/conda
-  #  19  export PATH=$PATH:/root/miniconda3/bin/conda
-  #  20  conda create pytorch3d
-  #  21  export PATH=$PATH:/root/miniconda3/bin/
-  #  22  conda create pytorch3
-  #  23  ls
-  #  24  pwd
-  #  25  ls
-  #  26  conda create -n clip_actor python=3.7
-  #  27  conda activate clip_actor
-  #  28  conda init bash
-  #  29  source .bashrc
-  #  30  source $HOME/.bashrc 
-  #  31  conda create -n clip_actor python=3.7
-  #  32  conda activate clip_actor
-  #  33  ls
-  #  34  conda install -c pytorch pytorch=1.9.0 torchvision=0.10.0 cudatoolkit=10.2
-  #  35  conda install -c fvcore -c iopath -c conda-forge fvcore iopath
-  #  36  conda install pytorch3d -c pytorch3d
-  #  37  pip install -r requirements.txt 
-  #  38  python clip_actor.py --prompt "Freddie Mercury is dancing" --exp_name mercury_dancing
-  #  39  jobs
-  #  40  ps ax | grep python
-  #  41  kill -9 6050
-  #  42  mkdir logs
-  #  43  ls ..
-  #  44  ls
-  #  45  ls logs/
-  #  46  python clip_actor.py --prompt "Freddie Mercury is dancing" --exp_name mercury_dancing
-  #  47  ps ax | grep python
-  #  48  kill -9 6066
-  #  49  pip install gdown
-  #  50  gdown https://drive.google.com/file/d/1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N/view?usp=sharing
-  #  51  gdown --id 1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N
-  #  52  ls
-  #  53  unzip models_smplx_v1_1.zip 
-  #  54  yum install unzip
-  #  55  apt-get install unzip
-  #  56  apt-get install zip
-  #  57* apt-get install --upd
-  #  58  sudo apt install zip
-  #  59  apt install zip
-  #  60  apt update
-  #  61  apt install zip
-  #  62  unzip models_smplx_v1_1.zip 
-  #  63  ls
-  #  64  mv models body_models
-  #  65  python clip_actor.py --prompt "Freddie Mercury is dancing" --exp_name mercury_dancing
-  #  66  bg
-  #  67  ls
-  #  68  ls logs/
-  #  69  fg
-  #  70  killall -9 python
-  #  71  apt install psmisc
-  #  72  killall -9 python
-  #  73  python clip_actor.py 
-  #  74  fg
-  #  75  bg
-  #  76  killall -9 python
-  #  77  apt-get install nano
-  #  78  nano clip_actor.py 
-  #  79  python clip_actor.py 
-  #  80  killall -9 python
-  #  81  cp $HOME/.bash_history .
-  #  82  chmod ugoa+rx .bash_history 
-  #  83  cat $HOME/.bashrc
-  #  84  history -a
-  #  85  history 
-
-
-    # - wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh
-    # - bash ./Miniconda3-py37_4.12.0-Linux-x86_64.sh -fb
-    # - export PATH=$PATH:/root/miniconda3/bin/
-    # - /root/miniconda3/bin/conda install -y cudatoolkit=10.2
-    # - /root/miniconda3/bin/conda install -y -c fvcore -c iopath -c conda-forge fvcore iopath
-    # - /root/miniconda3/bin/conda install -y pytorch3d -c pytorch3d
+  # 1  
+  #   2  python -c import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_arch_list())
+  #   3  python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_arch_list())"
+  #   4  pip install git+https://github.com/nghorbani/human_body_prior.git
+  #   5  pip install git+https://github.com/nghorbani/body_visualizer.git
+  #   6  gdown --id 1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N
+  #   7  pip install gdown
+  #   8  gdown --id 1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N
+  #   9  unzip models_smplx_v1_1.zip 
+  #  10  gdown
+  #  11  gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_
+  #  12  unzip smpl.zip 
+  #  13  mv smpl models
+  #  14  ls
+  #  15  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  16  cd AvatarGen/
+  #  17  ls
+  #  18  cd AppearanceGen/
+  #  19  ls
+  #  20  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  21  pip install tensorboard
+  #  22  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  23  pip install tensorboard skimage
+  #  24  pip install tensorboard scitkit-image
+  #  25  pip install tensorboard scikit-image
+  #  26  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  27  mv ../../models/smpl ../../smpl_models
+  #  28  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  29  mkdir ../../smpl_models/smpl
+  #  30  mv ../../smpl_models/*.pkl smpl
+  #  31  mv ../../smpl_models/*.pkl ../../smpl_models/smpl
+  #  32  python main.py --mode train_clip --conf confs/examples/abrahamlincoln.conf
+  #  33  docker ps
+  #  34  python main.py --mode train_clip --conf confs/examples_small/example.conf 
+  #  35  fg
+  #  36  mv exp/smpl/example exp/smpl/exampleold
+  #  37  python main.py --mode train_clip --conf confs/examples_small/example.conf 
+  #  38  bg
+  #  39  fg
+  #  40  history
