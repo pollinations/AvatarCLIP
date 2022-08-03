@@ -9,7 +9,8 @@ class Predictor(BasePredictor):
         """Run pip install git+https://github.com/voodoohop/neural_renderer.git"""
         os.system('pip install git+https://github.com/voodoohop/neural_renderer.git')
         os.system('mv /avatarclip_data /src/AvatarGen/ShapeGen/data')
-        os.system('mv /smpl_data /src/smpl_models')
+        os.system('mkdir -p /src/smpl_models')
+        os.system('mv /smpl_data /src/smpl_models/smpl')
 
     def predict(self,
             text: str = Input(description="Coarse character prompt", default="overweight sumo wrestler")
