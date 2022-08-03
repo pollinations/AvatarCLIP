@@ -26,17 +26,10 @@ build:
     #- pip install git+https://github.com/voodoohop/neural_renderer.git
     - pip install tensorboard scikit-image
     - pip install gdown
-    - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_
-    - unzip smpl.zip
-    - mv smpl smpl_models
+    - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_ && unzip smpl.zip && mv smpl smpl_data
     - gdown --id 1ae-pnDhzOG3brxBfU1lBq8CyOKz4rnzd 
-    - unzip avatarclip_data.zip 
-    - mkdir -p AvatarGen/ShapeGen/data/
-    - mv -v avatarclip_data/* AvatarGen/ShapeGen/data/
+    - unzip /avatarclip_data.zip 
 
-    #- pip install git+https://github.com/voodoohop/neural_renderer.git git+https://github.com/nghorbani/human_body_prior.git git+https://github.com/nghorbani/body_visualizer.git
-    # - gdown --id 1kMEBdBbEzZUE3HdfnV4uvyarB4u8oc4N
-    # - unzip models_smplx_v1_1.zip 
 predict: "predict.py:Predictor"
 
   # 1  
