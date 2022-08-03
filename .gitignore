@@ -7,3 +7,5 @@ AvatarGen/ShapeGen/output
 pretrained_models
 avatarclip_data
 avatarclip_data.zip
+.cog/
+__MACOSX/
