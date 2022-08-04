@@ -13,7 +13,8 @@ class Predictor(BasePredictor):
     def setup(self):
         """Run pip install git+https://github.com/voodoohop/neural_renderer.git"""
         os.system('pip install git+https://github.com/voodoohop/neural_renderer.git')
-        os.system('mv -v /avatarclip_data/* /src/AvatarGen/ShapeGen/data/')
+        os.system('mv -v /avatarclip_data /src/AvatarGen/ShapeGen/data')
+        os.system('mkdir -p /src/AvatarGen/ShapeGen/output/coarse_shape')
         os.system('mkdir -p /src/smpl_models')
         os.system('mv -v /smpl_data /src/smpl_models/smpl')
 
