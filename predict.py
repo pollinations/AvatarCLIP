@@ -24,7 +24,7 @@ class Predictor(BasePredictor):
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
         print("creating avatar for text", text)
         previouspath = os.getcwd()
-        os.chdir("./AvatarGen/ShapeGen/")
+        os.chdir("/src/AvatarGen/ShapeGen/")
         print("glob before", glob("./output/coarse_shape/*.obj"))
         os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
         
