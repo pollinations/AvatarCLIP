@@ -30,6 +30,6 @@ class Predictor(BasePredictor):
         
         filepaths = glob("./output/coarse_shape/*.obj")
         print("glob after", glob("./output/coarse_shape/*.obj"))
-        print("returning",filepath)
+        print("returning",filepaths)
         return [Path(filepath) for filepath in filepaths]
 
