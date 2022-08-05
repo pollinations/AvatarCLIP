@@ -28,8 +28,8 @@ class Predictor(BasePredictor):
         print("glob before", glob("./output/coarse_shape/*.obj"))
         os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
         
-        filepath = glob("./output/coarse_shape/*.obj")[0]
+        filepaths = glob("./output/coarse_shape/*.obj")
         print("glob after", glob("./output/coarse_shape/*.obj"))
         print("returning",filepath)
-        return Path(filepath)
+        return [Path(filepath) for filepath in filepaths]
 
