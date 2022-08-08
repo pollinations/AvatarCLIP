@@ -29,7 +29,6 @@ build:
     - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_ && unzip smpl.zip && mv smpl smpl_data
     - gdown --id 1ae-pnDhzOG3brxBfU1lBq8CyOKz4rnzd 
     - unzip /avatarclip_data.zip 
-
 predict: "predict.py:Predictor"
 
   # 1  

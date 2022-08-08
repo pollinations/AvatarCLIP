@@ -26,6 +26,7 @@ class Predictor(BasePredictor):
         previouspath = os.getcwd()
         os.chdir("/src/AvatarGen/ShapeGen/")
         print("glob before", glob("./output/coarse_shape/*.obj"))
+        os.system(f'rm -rf ./output/coarse_shape')
         os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
         
         filepaths = glob("./output/coarse_shape/*.obj")
