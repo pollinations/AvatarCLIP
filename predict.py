@@ -38,10 +38,16 @@ class Predictor(BasePredictor):
             
             filepath_coarse_obj = filepaths[0]
             
+
             return Path(filepath_coarse_obj)
         else:
             os.chdir("/src/AvatarGen/AppearanceGen/")
+            os.system("mkdir /outputs")
+            os.system("echo logloglog >> /outputs/log")
             os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}"')
             os.system('ls -l /outputs')
             lastimage = glob("/outputs/*.png")[-1]
+            os.system("rm -rv /outputs/logs /outputs/normals /outputs/recording")
+            print("returning last image",lastimage)
+            
             return Path(lastimage)
