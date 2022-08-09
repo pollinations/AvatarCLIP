@@ -28,7 +28,7 @@ import imageio
 to8b = lambda x : (255*np.clip(x,0,1)).astype(np.uint8)
 
 class Runner:
-    def __init__(self, conf_path, mode='train', case='CASE_NAME', is_continue=False, is_colab=False, conf=None):
+    def __init__(self, conf_path, mode='train', case='CASE_NAME', is_continue=False, is_colab=False, conf=None, prompt=None):
         self.device = torch.device('cuda')
         self.conf_path = conf_path
 
@@ -41,6 +41,9 @@ class Runner:
             f.close()
             self.conf = ConfigFactory.parse_string(conf_text)
 
+        self.prompt = f"a 3D rendering of {prompt} in unreal engine"
+        self.back_prompt = f"a 3D rendering of the back of {prompt} in unreal engine"
+        self.face_prompt = f"a 3D rendering of the face of {prompt} in unreal engine"
         self.base_exp_dir = self.conf['general.base_exp_dir']
         os.makedirs(self.base_exp_dir, exist_ok=True)
         self.dataset = SMPL_Dataset(self.conf['dataset'])
@@ -270,19 +273,19 @@ class Runner:
             tmp = torch.zeros_like(v)
             return v + torch.normal(mean=tmp+mean, std=tmp+std)
         
-        prompt = self.conf.get_string('clip.prompt')
+        prompt = self.prompt
         print("Prompt: {}".format(prompt))
         prompt_token = clip.tokenize([prompt]).cuda()
         self.encoded_text = self.perceptor.encode_text(prompt_token).detach()
         
         if self.use_face_prompt:
-            face_prompt = self.conf.get_string('clip.face_prompt')
+            face_prompt = self.face_prompt
             print("Face Prompt: {}".format(face_prompt))
             face_prompt_token = clip.tokenize([face_prompt]).cuda()
             self.encoded_face_text = self.perceptor.encode_text(face_prompt_token).detach()
 
         if self.use_back_prompt:
-            back_prompt = self.conf.get_string('clip.back_prompt')
+            back_prompt = self.back_prompt
             print("Back Prompt: {}".format(back_prompt))
             back_prompt_token = clip.tokenize([back_prompt]).cuda()
             self.encoded_back_text = self.perceptor.encode_text(back_prompt_token).detach()
@@ -797,21 +800,21 @@ class Runner:
             normal_img = (np.matmul(rot[None, :, :], normal_img[:, :, None])
                           .reshape([H, W, 3, -1]) * 128 + 128).clip(0, 255)
 
-        os.makedirs(os.path.join(self.base_exp_dir, 'validations_fine'), exist_ok=True)
-        os.makedirs(os.path.join(self.base_exp_dir, 'validations_extra_fine'), exist_ok=True)
+        # os.makedirs(os.path.join(self.base_exp_dir, 'validations_fine'), exist_ok=True)
+        # os.makedirs(os.path.join(self.base_exp_dir, 'validations_extra_fine'), exist_ok=True)
         os.makedirs(os.path.join(self.base_exp_dir, 'normals'), exist_ok=True)
 
         for i in range(img_fine.shape[-1]):
             if len(out_rgb_fine) > 0:
                 cv.imwrite(os.path.join(self.base_exp_dir,
-                                        'validations_fine',
-                                        '{:0>8d}_{}_{}.png'.format(self.iter_step, i, idx)),
+                                        # 'validations_fine',
+                                        'fine_{:0>8d}_{}_{}.png'.format(self.iter_step, i, idx)),
                            np.concatenate([img_fine[..., i],
                                            self.dataset.image_at(idx, resolution_level=resolution_level)]))
             if len(out_extra_rgb_fine) > 0:
                 cv.imwrite(os.path.join(self.base_exp_dir,
-                                        'validations_extra_fine',
-                                        '{:0>8d}_{}_{}.png'.format(self.iter_step, i, idx)),
+                                        # 'validations_extra_fine',
+                                        'extra_fine_{:0>8d}_{}_{}.png'.format(self.iter_step, i, idx)),
                            cv.cvtColor(extra_img_fine[..., i], cv.COLOR_RGB2BGR))
             if len(out_normal_fine) > 0:
                 cv.imwrite(os.path.join(self.base_exp_dir,
@@ -957,6 +960,7 @@ if __name__ == '__main__':
     parser.add_argument('--is_continue', default=False, action="store_true")
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('--case', type=str, default='smpl')
+    parser.add_argument('--prompt', type=str, default='a strong man')
 
     args = parser.parse_args()
 
@@ -965,7 +969,7 @@ if __name__ == '__main__':
     if args.mode == 'validate_mesh' or \
        args.mode == 'render_geometry_cast_light':
         args.is_continue = True
-    runner = Runner(args.conf, args.mode, args.case, args.is_continue)
+    runner = Runner(args.conf, args.mode, args.case, args.is_continue, prompt=args.prompt)
 
     if args.mode == 'train':
         runner.train()

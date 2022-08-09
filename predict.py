@@ -19,18 +19,29 @@ class Predictor(BasePredictor):
         os.system('mv -v /smpl_data /src/smpl_models/smpl')
 
     def predict(self,
-            text: str = Input(description="Coarse character prompt", default="overweight sumo wrestler")
+            text: str = Input(description="prompt", default="overweight sumo wrestler"),
+            coarse: bool = Input(description="generate coarse avatar (super fast)", default=True)
     ) -> Path:
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
         print("creating avatar for text", text)
-        previouspath = os.getcwd()
-        os.chdir("/src/AvatarGen/ShapeGen/")
-        print("glob before", glob("./output/coarse_shape/*.obj"))
-        os.system(f'rm -rf ./output/coarse_shape')
-        os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
         
-        filepaths = glob("./output/coarse_shape/*.obj")
-        print("glob after", glob("./output/coarse_shape/*.obj"))
-        print("returning",filepaths)
-        return Path(filepaths[0])
-
+        if coarse:
+            previouspath = os.getcwd()
+            os.chdir("/src/AvatarGen/ShapeGen/")
+            print("glob before", glob("./output/coarse_shape/*.obj"))
+            os.system(f'rm -rf ./output/coarse_shape')
+            os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
+            
+            filepaths = glob("./output/coarse_shape/*.obj")
+            print("glob after", glob("./output/coarse_shape/*.obj"))
+            print("returning",filepaths)
+            
+            filepath_coarse_obj = filepaths[0]
+            
+            return Path(filepath_coarse_obj)
+        else:
+            os.chdir("/src/AvatarGen/AppearanceGen/")
+            os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}"')
+            os.system('ls -l /outputs')
+            lastimage = glob("/outputs/*.png")[-1]
+            return Path(lastimage)
