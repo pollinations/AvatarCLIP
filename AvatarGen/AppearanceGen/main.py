@@ -28,7 +28,7 @@ import imageio
 to8b = lambda x : (255*np.clip(x,0,1)).astype(np.uint8)
 
 class Runner:
-    def __init__(self, conf_path, mode='train', case='CASE_NAME', is_continue=False, is_colab=False, conf=None, prompt=None):
+    def __init__(self, conf_path, mode='train', case='CASE_NAME', is_continue=False, is_colab=False, conf=None, prompt=None, iterations=1000):
         self.device = torch.device('cuda')
         self.conf_path = conf_path
 
@@ -50,7 +50,7 @@ class Runner:
         self.iter_step = 0
 
         # Training parameters
-        self.end_iter = self.conf.get_int('train.end_iter')
+        self.end_iter = iterations
         self.save_freq = self.conf.get_int('train.save_freq')
         self.report_freq = self.conf.get_int('train.report_freq')
         self.val_freq = self.conf.get_int('train.val_freq')
@@ -961,6 +961,8 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('--case', type=str, default='smpl')
     parser.add_argument('--prompt', type=str, default='a strong man')
+    parser.add_argument('--iterations', type=int, default=1000)
+
 
     args = parser.parse_args()
 
@@ -969,7 +971,7 @@ if __name__ == '__main__':
     if args.mode == 'validate_mesh' or \
        args.mode == 'render_geometry_cast_light':
         args.is_continue = True
-    runner = Runner(args.conf, args.mode, args.case, args.is_continue, prompt=args.prompt)
+    runner = Runner(args.conf, args.mode, args.case, args.is_continue, prompt=args.prompt, iterations=args.iterations)
 
     if args.mode == 'train':
         runner.train()

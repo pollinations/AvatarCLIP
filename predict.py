@@ -20,7 +20,8 @@ class Predictor(BasePredictor):
 
     def predict(self,
             text: str = Input(description="prompt", default="overweight sumo wrestler"),
-            coarse: bool = Input(description="generate coarse avatar (super fast)", default=True)
+            coarse: bool = Input(description="generate coarse avatar (super fast)", default=True),
+            iterations: int = Input(description="number of iterations (for fine avatar)", default=1000)
     ) -> Path:
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
         print("creating avatar for text", text)
@@ -44,7 +45,7 @@ class Predictor(BasePredictor):
             os.chdir("/src/AvatarGen/AppearanceGen/")
             os.system("mkdir /outputs")
             os.system("echo logloglog >> /outputs/log")
-            os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}"')
+            os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}" --iterations {iterations}')
             os.system('ls -l /outputs')
             lastimage = glob("/outputs/*.png")[-1]
             os.system("rm -rv /outputs/logs /outputs/normals /outputs/recording")
