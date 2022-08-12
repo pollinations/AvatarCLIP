@@ -46,6 +46,7 @@ class Predictor(BasePredictor):
             os.system("mkdir /outputs")
             os.system("echo logloglog >> /outputs/log")
             os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}" --iterations {iterations}')
+            os.system('python main.py --mode validate_mesh --conf confs/examples_small/example.conf')
             os.system('ls -l /outputs')
             lastimage = glob("/outputs/*.png")[-1]
             os.system("rm -rv /outputs/logs /outputs/normals /outputs/recording")
