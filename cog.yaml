@@ -14,7 +14,8 @@ build:
     - tqdm==4.50.2
     - scipy==1.7.0
     - PyMCubes==0.1.2
-  
+    - pymeshlab==2022.2.post2
+
   system_packages:
     - "ffmpeg"
     - "zip"
@@ -29,7 +30,8 @@ build:
     - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_ && unzip smpl.zip && mv smpl smpl_data
     - gdown --id 1ae-pnDhzOG3brxBfU1lBq8CyOKz4rnzd 
     - unzip /avatarclip_data.zip 
-
+    # FBX bindings for python
+    - mkdir fbxpythontmp && cd fbxpythontmp && gdown --id 15I6vdysb2Sgam-zC11ARdvenp07MEGBJ && tar -xzvf fbxpythonsdk.tar.gz && cp -rv * /usr/local
 predict: "predict.py:Predictor"
 
   # 1  

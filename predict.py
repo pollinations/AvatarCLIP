@@ -1,6 +1,7 @@
 from cog import BasePredictor, Path, Input
 import os  
 from glob import glob
+import pymeshlab
 
 #MODEL_PATHS = "--smpl_model_folder /smpl_data --AE_path_fname /avatarclip_data/model_VAE_16.pth --codebook_fname /avatarclip_data/codebook.pth"
 
@@ -46,10 +47,30 @@ class Predictor(BasePredictor):
             os.system("mkdir /outputs")
             os.system("echo logloglog >> /outputs/log")
             os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}" --iterations {iterations}')
+            
+            # transform NERF to mesh
             os.system('python main.py --mode validate_mesh --conf confs/examples_small/example.conf')
+       
+            # convert mesh to obj
+            lastmesh = glob("/outputs/meshes/*.ply")[-1]
+            target_path = f"/outputs/z_avatar.obj"
+
+            print(f"converting mesh '{lastmesh}' to obj")
+            ms = pymeshlab.MeshSet()
+            ms.load_new_mesh(lastmesh)
+            #ms.compute_color_transfer_vertex_to_face()
+            ms.meshing_decimation_quadric_edge_collapse(targetfacenum=10000)
+            ms.save_current_mesh(target_path) 
+       
+            # os.chdir('/src/Avatar2FBX/')
+            # os.system('mkdir -p ./meshes')
+            # os.system(f'cp -v {lastmesh} ./meshes')
+            # os.system('python export_fbx.py')
+            # os.system('cp -v ./outputs/*.fbx /outputs')
+
             os.system('ls -l /outputs')
             lastimage = glob("/outputs/*.png")[-1]
             os.system("rm -rv /outputs/logs /outputs/normals /outputs/recording")
-            print("returning last image",lastimage)
             
+            print("returning last image",lastimage)
             return Path(lastimage)
