@@ -2,6 +2,7 @@ from cog import BasePredictor, Path, Input
 import os  
 from glob import glob
 import pymeshlab
+from time import sleep
 
 #MODEL_PATHS = "--smpl_model_folder /smpl_data --AE_path_fname /avatarclip_data/model_VAE_16.pth --codebook_fname /avatarclip_data/codebook.pth"
 
@@ -39,7 +40,12 @@ class Predictor(BasePredictor):
             print("returning",filepaths)
             
             filepath_coarse_obj = filepaths[0]
-            
+
+            # save as glb file
+            sleep(1)
+            target_glb_path = os.path.join("/outputs",f"z_avatar.glb")
+            print("running ", f"obj2gltf -i {filepath_coarse_obj} -o {target_glb_path}")
+            os.system(f"obj2gltf -i {filepath_coarse_obj} -o {target_glb_path}")            
 
             return Path(filepath_coarse_obj)
         else:
@@ -61,7 +67,15 @@ class Predictor(BasePredictor):
             #ms.compute_color_transfer_vertex_to_face()
             ms.meshing_decimation_quadric_edge_collapse(targetfacenum=10000)
             ms.save_current_mesh(target_path) 
-       
+            
+
+            # save as glb file
+            sleep(1)
+            target_glb_path = os.path.join("/outputs",f"z_avatar.glb")
+            print("running ", f"obj2gltf -i {target_path} -o {target_glb_path}")
+            os.system(f"obj2gltf -i {target_path} -o {target_glb_path}")
+
+
             # os.chdir('/src/Avatar2FBX/')
             # os.system('mkdir -p ./meshes')
             # os.system(f'cp -v {lastmesh} ./meshes')
