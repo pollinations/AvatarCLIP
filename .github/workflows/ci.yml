@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.9
-      
+
       - name: Install linters
         run: pip install black flake8 isort
 
@@ -36,7 +36,6 @@ jobs:
         run: |
           curl -o /usr/local/bin/cog -L https://github.com/replicate/cog/releases/latest/download/cog_`uname -s`_`uname -m`
           chmod +x /usr/local/bin/cog
-
       - name: Build docker image
         run: cog build -t image:test
 
@@ -49,11 +48,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-  
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      
+
       - name: Create repository if it doesn't exist yet
         run: aws ecr describe-repositories --repository-names ${{ github.repository }} || aws ecr create-repository --repository-name ${{ github.repository }}
 
@@ -66,7 +65,6 @@ jobs:
           docker tag image:test $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker inspect image:test > inspect.json
-          python .github/workflows/extract_openapi.py
           
       - uses: webfactory/ssh-agent@v0.5.4
         with:
@@ -80,7 +78,8 @@ jobs:
           git config --global user.email "ci@pollinations.ai"
           git config --global user.name "pollinations-ci"
           git clone git@github.com:pollinations/model-index.git
-          cd model-index && python add_image.py ${{ github.repository }} $ECR_REGISTRY/$ECR_REPOSITORY && cd ..
           mkdir -p  model-index/${{ github.repository }}
-          cp openapi.json model-index/${{ github.repository }}/openapi.json
-          cd model-index && git add . && (git commit -m "Updated ${{ github.repository }}: ${{ github.event.head_commit.message }}" && git push) || echo "model index not updated"
+          cp meta.json model-index/${{ github.repository }}/meta.json
+          cp inspect.json model-index/${{ github.repository }}/inspect.json
+          cd model-index && python add_image.py ${{ github.repository }} $ECR_REGISTRY/$ECR_REPOSITORY && cd ..
+          cd model-index && git add . && (git commit -m "Updated ${{ github.repository }}: ${{ github.event.head_commit.message }}" && git push) || echo "model index not updated" 
