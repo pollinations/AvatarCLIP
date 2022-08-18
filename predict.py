@@ -64,7 +64,7 @@ class Predictor(BasePredictor):
             print(f"converting mesh '{lastmesh}' to obj")
             ms = pymeshlab.MeshSet()
             ms.load_new_mesh(lastmesh)
-            #ms.compute_color_transfer_vertex_to_face()
+            ms.compute_color_transfer_vertex_to_face()
             ms.meshing_decimation_quadric_edge_collapse(targetfacenum=20000)
             ms.save_current_mesh(target_path) 
             
