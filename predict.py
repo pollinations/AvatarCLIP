@@ -50,7 +50,7 @@ class Predictor(BasePredictor):
             return Path(filepath_coarse_obj)
         else:
             os.chdir("/src/AvatarGen/AppearanceGen/")
-            os.system(f'python main.py --mode train_clip --conf confs/examples_small/example.conf --prompt "{text}" --iterations {iterations}')
+            os.system(f'python main.py --mode train_clip --conf confs/examples_small/pollinations.conf --prompt "{text}" --iterations {iterations}')
             
             # transform NERF to mesh
             os.system('python main.py --mode validate_mesh --conf confs/examples_small/example.conf')
