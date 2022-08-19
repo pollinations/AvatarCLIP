@@ -22,13 +22,13 @@ class Predictor(BasePredictor):
 
     def predict(self,
             text: str = Input(description="prompt", default="overweight sumo wrestler"),
-            coarse: bool = Input(description="generate coarse avatar (super fast)", default=True),
-            iterations: int = Input(description="number of iterations (for fine avatar)", default=1000)
+            fine: bool = Input(description="whether to generate a coarse avatar with no color (fast) or whether to add detail and texture (slow)", default=True),
+            iterations: int = Input(description="number of iterations (for fine avatar)", default=10000)
     ) -> Path:
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
         print("creating avatar for text", text)
         
-        if coarse:
+        if !fine:
             previouspath = os.getcwd()
             os.chdir("/src/AvatarGen/ShapeGen/")
             print("glob before", glob("./output/coarse_shape/*.obj"))
