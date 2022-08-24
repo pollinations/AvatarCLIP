@@ -9,6 +9,6 @@
     "category": "0 Featured",
     "description": "<img src=\"https://i.imgur.com/a9hByt4.png\" width=\"300\"> \n\n\n\nThis is a model that clips the avatar of a user to a specific part of the image. It is useful for creating avatars for other users.\n\n\n\n---\n\n\n\nAccess our Avatar Clip Guide(https://multimodal.art/avatar-clip) (_under construction_), our [GitHub](",
     "pollinator_group": [
-        "a100", "a10"
+        "a100", "A10"
     ]
 }
