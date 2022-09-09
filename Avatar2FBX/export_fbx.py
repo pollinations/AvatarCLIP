@@ -10,23 +10,24 @@
 
 
 import sys
-sys.path.append('/path/to/fbxsdk/build/lib/Python37_x64')
 
-import torch
+sys.path.append('/usr/local/lib/Python37_x64')
+
 import os
-import numpy as np
 
+import numpy as np
+import torch
 from tqdm import tqdm
+
 try:
     import FbxCommon
-    from FbxCommon import *
     from fbx import *
+    from FbxCommon import *
 except:
     print("Error: module FbxCommon and/or fbx failed to import.\n")
 
-from utils.ply_utils import *
 from utils.fbx_utils import *
-
+from utils.ply_utils import *
 
 if __name__ == "__main__":
 
@@ -40,7 +41,7 @@ if __name__ == "__main__":
     mesh_dir = os.path.join(root_dir, 'meshes')
     pose_dir = os.path.join(root_dir, 'poses')
     save_dir = os.path.join(root_dir, 'outputs')
-    model_dir = '../smpl_models'
+    model_dir = '/smpl_data'
 
     ply_names = os.listdir(mesh_dir)
 

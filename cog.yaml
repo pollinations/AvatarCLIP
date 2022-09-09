@@ -30,8 +30,6 @@ build:
     - gdown --id 1krWnGpL1Pj6Q_0DzJZ0zFbxMc41U5K6_ && unzip smpl.zip && mv smpl smpl_data
     - gdown --id 1ae-pnDhzOG3brxBfU1lBq8CyOKz4rnzd 
     - unzip /avatarclip_data.zip 
-    # FBX bindings for python
-    #- mkdir fbxpythontmp && cd fbxpythontmp && gdown --id 15I6vdysb2Sgam-zC11ARdvenp07MEGBJ && tar -xzvf fbxpythonsdk.tar.gz && cp -rv * /usr/local
 
     # node
     - apt-get update
@@ -41,6 +39,22 @@ build:
     #- npm install
     # obj2gltf NPM package
     - "npm install -g obj2gltf"
+    
+    # rigging
+
+    ## FBX bindings for python
+    - mkdir fbxpythontmp && cd fbxpythontmp && gdown --id 15I6vdysb2Sgam-zC11ARdvenp07MEGBJ && tar -xzvf fbxpythonsdk.tar.gz && cp -rv * /usr/local
+
+    ## Python3.6
+    - apt-get install -y git
+    - apt-get install -y build-essential libbz2-dev libssl-dev libreadline-dev libsqlite3-dev tk-dev
+    # optional scientific package headers (for Numpy, Matplotlib, SciPy, etc.)
+    - apt-get install -y libpng-dev libfreetype6-dev    
+    - wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
+    - tar -xvf Python-3.6.8.tar.xz
+    - cd Python-3.6.8 && ./configure && make install
+    - python3.6 -m pip install --upgrade pip && python3.6 -m pip install "torch==1.10.1" "torchvision==0.11.2" "torchaudio==0.10.1" trimesh==3.9.8 pyhocon==0.3.57 icecream==2.1.0 opencv_python==4.5.2.52 tqdm==4.50.2 scipy PyMCubes==0.1.2 pymeshlab
+    - python3.6 -m pip install open3d smplx chumpy
 
 predict: "predict.py:Predictor"
 

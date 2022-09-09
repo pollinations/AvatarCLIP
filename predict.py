@@ -1,15 +1,21 @@
-from cog import BasePredictor, Path, Input
-import os  
+import os
+import sys
 from glob import glob
-import pymeshlab
 from time import sleep
+
+import pymeshlab
+from cog import BasePredictor, Input, Path
+
+sys.path.append("/usr/local/lib/Python37_x64")
 
 #MODEL_PATHS = "--smpl_model_folder /smpl_data --AE_path_fname /avatarclip_data/model_VAE_16.pth --codebook_fname /avatarclip_data/codebook.pth"
 
-# INIT_COMMANDS="""pip install git+https://github.com/voodoohop/neural_renderer.git
-# mv /avatarclip_data/* /src/AvatarGen/ShapeGen/data/
+
+
+# mv -v /avatarclip_data /src/AvatarGen/ShapeGen/data
+# mkdir -p /src/AvatarGen/ShapeGen/output/coarse_shape
 # mkdir -p /src/smpl_models
-# mv /smpl_data /src/smpl_models/smpl"""
+# cp -rv /smpl_data /src/smpl_models/smpl
 
 class Predictor(BasePredictor):
     def setup(self):
@@ -18,7 +24,8 @@ class Predictor(BasePredictor):
         os.system('mv -v /avatarclip_data /src/AvatarGen/ShapeGen/data')
         os.system('mkdir -p /src/AvatarGen/ShapeGen/output/coarse_shape')
         os.system('mkdir -p /src/smpl_models')
-        os.system('mv -v /smpl_data /src/smpl_models/smpl')
+        os.system('cp -rv /smpl_data /src/smpl_models/smpl')
+        
 
     def predict(self,
             text: str = Input(description="prompt", default="overweight sumo wrestler"),
@@ -26,7 +33,7 @@ class Predictor(BasePredictor):
             iterations: int = Input(description="number of iterations (for fine avatar)", default=10000)
     ) -> Path:
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
-        print("creating avatar for text", text)
+        print("...creating avatar for text", text)
         
         if not fine:
             previouspath = os.getcwd()
@@ -56,6 +63,8 @@ class Predictor(BasePredictor):
             os.system('python main.py --mode validate_mesh --conf confs/examples_small/example.conf')
        
             # convert mesh to obj
+            print("glob before: /output/coarse_shape/*.obj", glob("/output/coarse_shape/*.obj"))
+            print("glob before: ./output/coarse_shape/*.obj", glob("./output/coarse_shape/*.obj"))
             lastmesh = glob("/outputs/meshes/*.ply")[-1]
             target_path = f"/outputs/z_avatar.obj"
 
