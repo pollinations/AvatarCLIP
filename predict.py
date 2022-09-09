@@ -27,6 +27,7 @@ class Predictor(BasePredictor):
     ) -> Path:
         """Run python main.py --target_txt '[text]' in folder ./AvatarGen/ShapeGen"""
         print("creating avatar for text", text)
+        iterations = max(501, iterations) # otherwise not a single mesh will be written
         
         if not fine:
             previouspath = os.getcwd()
@@ -35,7 +36,7 @@ class Predictor(BasePredictor):
             os.system(f'rm -rf ./output/coarse_shape')
             os.system(f'python main.py --target_txt "a 3d rendering of {text} in unreal engine"')
             
-            filepaths = glob("./output/coarse_shape/*.obj")
+            filepaths = sorted(glob("./output/coarse_shape/*.obj"))
             print("glob after", glob("./output/coarse_shape/*.obj"))
             print("returning",filepaths)
             
@@ -56,7 +57,7 @@ class Predictor(BasePredictor):
             os.system('python main.py --mode validate_mesh --conf confs/examples_small/example.conf')
        
             # convert mesh to obj
-            lastmesh = glob("/outputs/meshes/*.ply")[-1]
+            lastmesh = sorted(glob("/outputs/meshes/*.ply"))[-1]
             target_path = f"/outputs/z_avatar.obj"
 
             print(f"converting mesh '{lastmesh}' to obj")
@@ -81,7 +82,7 @@ class Predictor(BasePredictor):
             # os.system('cp -v ./outputs/*.fbx /outputs')
 
             os.system('ls -l /outputs')
-            lastimage = glob("/outputs/*.png")[-1]
+            lastimage = sorted(glob("/outputs/*.png"))[-1]
             os.system("rm -rv /outputs/logs /outputs/normals /outputs/recording")
             
             print("returning last image",lastimage)
