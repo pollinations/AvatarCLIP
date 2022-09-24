@@ -25,7 +25,8 @@ class Predictor(BasePredictor):
         os.system('mkdir -p /src/AvatarGen/ShapeGen/output/coarse_shape')
         os.system('mkdir -p /src/smpl_models')
         os.system('cp -rv /smpl_data /src/smpl_models/smpl')
-        os.system('cp -rv /smpl_data /smpl_data/smpl')
+        os.system('mkdir -p /smpl_data/smpl')
+        os.system('cp -rv /smpl_data/* /smpl_data/smpl')
         
 
     def predict(self,
@@ -69,8 +70,7 @@ class Predictor(BasePredictor):
             # convert mesh to obj
 
             print("glob before: /output/coarse_shape/*.obj", glob("/output/coarse_shape/*.obj"))
-            print("glob before: ./output/coarse_shape/*.obj", glob("./output/coarse_shape/*.obj"))
-            lastmesh = glob("/outputs/meshes/*.ply")[-1]
+            lastmesh = sorted(glob("/outputs/meshes/*.ply"))[-1]
 
             target_path = f"/outputs/z_avatar.obj"
 
