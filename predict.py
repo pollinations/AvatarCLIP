@@ -72,6 +72,8 @@ class Predictor(BasePredictor):
             print("glob before: /output/coarse_shape/*.obj", glob("/output/coarse_shape/*.obj"))
             lastmesh = sorted(glob("/outputs/meshes/*.ply"))[-1]
 
+            os.system(f'cp {lastmesh} /outputs/mesh.ply')
+            
             target_path = f"/outputs/z_avatar.obj"
 
             print(f"converting mesh '{lastmesh}' to obj")
